@@ -66,3 +66,4 @@ understand git principals and main git commands.
 - Create a pull request from your branch to main branch, and assign it to your trainer. 
 Do not merge it yourself!
  
+^_^
