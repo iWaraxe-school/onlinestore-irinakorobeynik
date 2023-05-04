@@ -1,13 +1,12 @@
-package com.coherentsolutions;
+package com.coherentsolutions.domain;
 
-import java.util.List;
+import java.util.*;
 
 public abstract class Category {
     private String name;
-    private CategoryType type;
-    private List<Product> productList;
+    private List<Product> productList = new ArrayList<Product>();
 
-    public Category(String name, CategoryType type) {
+    public Category(String name) {
         this.name = name;
     }
 
@@ -27,12 +26,4 @@ public abstract class Category {
         this.productList = productList;
     }
 
-    @Override
-    public String toString() {
-        return "Category{" +
-                "name='" + name + '\'' +
-                ", type=" + type +
-                ", productList=" + productList +
-                '}';
-    }
 }

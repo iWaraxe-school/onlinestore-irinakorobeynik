@@ -1,7 +1,7 @@
-package com.coherentsolutions;
+package com.coherentsolutions.domain;
 
 public class FoodCategory extends Category{
     public FoodCategory(String name) {
-        super(name, CategoryType.FOOD);
+        super("Food");
     }
 }

@@ -1,4 +1,4 @@
-package com.coherentsolutions;
+package com.coherentsolutions.domain;
 
 public class Product {
     private String name;
@@ -38,10 +38,12 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" +
-                "name='" + name + '\'' +
-                ", rate=" + rate +
-                ", price=" + price +
-                '}';
+
+        return String.format("Product %s has %2s rate and %3s price", name,rate,price);
+
     }
+
+
 }
+
+
