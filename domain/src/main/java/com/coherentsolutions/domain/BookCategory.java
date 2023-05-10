@@ -2,7 +2,7 @@ package com.coherentsolutions.domain;
 
 public class BookCategory extends Category{
 
-    public BookCategory(String name) {
+    public BookCategory() {
         super("Book");
 
     }
