@@ -26,4 +26,19 @@ public abstract class Category {
         this.productList = productList;
     }
 
+    public void addProduct (Product product){
+        productList.add(product);
+    }
+
+    public void printCategoryWithProducts() {
+        if (productList.isEmpty()) {
+            System.out.println("the Category " + name + " has no products");
+        } else {
+            System.out.println("the Category " + name + " has the following products");
+
+            for (Product product : productList) {
+                System.out.println(product.toString());
+            }
+        }
+    }
 }
