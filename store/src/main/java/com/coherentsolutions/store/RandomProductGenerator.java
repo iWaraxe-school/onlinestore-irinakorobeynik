@@ -19,11 +19,11 @@ public class RandomProductGenerator {
         }
     }
 
-    public int generatePrice(Product product) {
+    public int generatePrice() {
         return faker.number().numberBetween(1, 1000);
     }
 
-    public int generateRate(Product product) {
+    public int generateRate() {
         return faker.number().numberBetween(1, 10);
     }
 
