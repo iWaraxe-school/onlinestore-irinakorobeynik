@@ -34,7 +34,7 @@ public abstract class Category {
         if (productList.isEmpty()) {
             System.out.println("the Category " + name + " has no products");
         } else {
-            System.out.println("the Category " + name + " has the following products");
+            System.out.println("The Category " + name + " has the following products:");
 
             for (Product product : productList) {
                 System.out.println(product.toString());

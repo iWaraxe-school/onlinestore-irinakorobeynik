@@ -1,6 +1,5 @@
 package com.coherentsolutions.store;
 
-import com.coherentsolutions.domain.Product;
 import com.github.javafaker.Faker;
 
 public class RandomProductGenerator {

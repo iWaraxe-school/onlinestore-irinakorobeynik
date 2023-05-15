@@ -19,10 +19,11 @@ public class RandomStorePopulator {
         this.store = store;
     }
 
-    public void FillStoreWithProduct() {
+    public void FillStoreWithProduct() throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         RandomProductGenerator randomProductGenerator = new RandomProductGenerator();
+        FillStoreWithCategories();
         List<Category> categoryList = this.store.getCategoryList();
-        int counter = nextInt(0, 10);
+        int counter = nextInt(1, 10);
         for (Category category : categoryList) {
             for (int i = 0; i < counter; i++) {
                 Product product = new Product(randomProductGenerator.generateName(category.getName()),
@@ -35,6 +36,13 @@ public class RandomStorePopulator {
 
     }
 
-    public void FillStoreWithCategories() {
+    private void FillStoreWithCategories() throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        Reflections reflections = new Reflections("com.coherentsolutions.domain");
+        Set<Class<? extends Category>> allClasses = reflections.getSubTypesOf(Category.class);
+        List<Category> categoryList = new ArrayList<>();
+        for (Class<? extends Category> allClass : allClasses) {
+            this.store.addCategory(allClass.getConstructor().newInstance());
+        }
     }
 }
+

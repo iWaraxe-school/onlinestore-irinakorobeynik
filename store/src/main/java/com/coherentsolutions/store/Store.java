@@ -10,11 +10,14 @@ public class Store {
     private List<Category> categoryList = new ArrayList<>();
 
     public Store() {
-
     }
 
-    public void addCategory(Category category){
+    public void addCategory(Category category) {
         categoryList.add(category);
+    }
+
+    public List<Category> getCategoryList() {
+        return categoryList;
     }
 
     public void printCategoryWithProducts() {
@@ -23,9 +26,14 @@ public class Store {
         } else {
             for (Category category : categoryList) {
                 category.printCategoryWithProducts();
+                System.out.println("");
             }
 
         }
+    }
+
+    public void deleteAll (){
+        categoryList.clear();
     }
 }
 
