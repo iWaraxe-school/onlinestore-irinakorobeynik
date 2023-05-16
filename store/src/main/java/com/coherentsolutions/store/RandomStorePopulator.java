@@ -13,7 +13,9 @@ import static org.apache.commons.lang3.RandomUtils.nextInt;
 
 public class RandomStorePopulator {
 
-    private Store store;
+    private final Store store;
+    public static final int MIN_VALUE = 1;
+    public static final int MAX_VALUE = 10;
 
     public RandomStorePopulator(Store store) {
         this.store = store;
@@ -23,17 +25,14 @@ public class RandomStorePopulator {
         RandomProductGenerator randomProductGenerator = new RandomProductGenerator();
         FillStoreWithCategories();
         List<Category> categoryList = this.store.getCategoryList();
-        int counter = nextInt(1, 10);
         for (Category category : categoryList) {
-            for (int i = 0; i < counter; i++) {
+            for (int i = 0; i < nextInt(MIN_VALUE, MAX_VALUE); i++) {
                 Product product = new Product(randomProductGenerator.generateName(category.getName()),
                         randomProductGenerator.generateRate(),
                         randomProductGenerator.generatePrice());
                 category.addProduct(product);
             }
-
         }
-
     }
 
     private void FillStoreWithCategories() throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {

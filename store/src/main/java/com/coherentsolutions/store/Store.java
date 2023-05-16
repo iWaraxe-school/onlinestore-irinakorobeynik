@@ -2,7 +2,6 @@ package com.coherentsolutions.store;
 
 import com.coherentsolutions.domain.Category;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,13 +25,13 @@ public class Store {
         } else {
             for (Category category : categoryList) {
                 category.printCategoryWithProducts();
-                System.out.println("");
+                System.out.println();
             }
 
         }
     }
 
-    public void deleteAll (){
+    public void deleteAll() {
         categoryList.clear();
     }
 }
