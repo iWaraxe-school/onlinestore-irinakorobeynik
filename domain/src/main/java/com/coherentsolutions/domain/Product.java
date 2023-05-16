@@ -39,7 +39,7 @@ public class Product {
     @Override
     public String toString() {
 
-        return String.format("Product %s has %2s rate and %3s price", name,rate,price);
+        return String.format("- Product %s has %2s rate and %3s price", name,rate,price);
 
     }
 

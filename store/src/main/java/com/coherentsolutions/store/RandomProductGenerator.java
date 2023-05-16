@@ -1,12 +1,18 @@
 package com.coherentsolutions.store;
 
-import com.coherentsolutions.domain.Product;
 import com.github.javafaker.Faker;
 
 public class RandomProductGenerator {
-    private Faker faker = new Faker();
+    private static final int MIN_PRICE = 1;
+    private static final int MAX_PRICE = 1000;
+    private static final int MIN_RATE = 1;
+    private static final int MAX_RATE = 10;
+    private final Faker faker = new Faker();
 
     public String generateName(String category) {
+        if (category == null || category.trim().isEmpty()) {
+            throw new IllegalArgumentException("Category must not be null or empty");
+        }
         switch (category) {
             case "Book":
                 return faker.book().title();
@@ -15,16 +21,16 @@ public class RandomProductGenerator {
             case "Phone":
                 return faker.company().name();
             default:
-                return "Random Product";
+                throw new IllegalArgumentException("Invalid category: " + category);
         }
     }
 
     public int generatePrice() {
-        return faker.number().numberBetween(1, 1000);
+        return faker.number().numberBetween(MIN_PRICE, MAX_PRICE);
     }
 
     public int generateRate() {
-        return faker.number().numberBetween(1, 10);
+        return faker.number().numberBetween(MIN_RATE, MAX_RATE);
     }
 
 }
