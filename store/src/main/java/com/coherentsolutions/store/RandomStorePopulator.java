@@ -21,9 +21,11 @@ public class RandomStorePopulator {
         this.store = store;
     }
 
-    public void FillStoreWithProduct() throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+    /*gets CategoryList filled in method below and fill each of them
+    with random quantity of products generated with Faker*/
+    public void fillStoreWithProduct() {
         RandomProductGenerator randomProductGenerator = new RandomProductGenerator();
-        FillStoreWithCategories();
+        fillStoreWithCategories();
         List<Category> categoryList = this.store.getCategoryList();
         for (Category category : categoryList) {
             for (int i = 0; i < nextInt(MIN_VALUE, MAX_VALUE); i++) {
@@ -35,12 +37,19 @@ public class RandomStorePopulator {
         }
     }
 
-    private void FillStoreWithCategories() throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    /* creates instances of classes that extends
+    Category class and add them to CategoryList */
+    private void fillStoreWithCategories()  {
         Reflections reflections = new Reflections("com.coherentsolutions.domain");
         Set<Class<? extends Category>> allClasses = reflections.getSubTypesOf(Category.class);
         List<Category> categoryList = new ArrayList<>();
         for (Class<? extends Category> allClass : allClasses) {
-            this.store.addCategory(allClass.getConstructor().newInstance());
+            try {
+                this.store.addCategory(allClass.getConstructor().newInstance());
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                     NoSuchMethodException e) {
+                throw new RuntimeException("Something goes wrong.Please Contact to Administrator");
+            }
         }
     }
 }
