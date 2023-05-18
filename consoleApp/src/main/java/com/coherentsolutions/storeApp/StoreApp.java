@@ -10,7 +10,7 @@ public class StoreApp {
         Store onlinestore = new Store();
         RandomStorePopulator randomStorePopulator = new RandomStorePopulator(onlinestore);
         randomStorePopulator.FillStoreWithProduct();
-        onlinestore.printCategoryWithProducts();
+        //onlinestore.printCategoryWithProducts();
 
     }
 }
