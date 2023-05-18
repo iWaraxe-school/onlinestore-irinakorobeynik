@@ -15,14 +15,14 @@ public class Store {
     }
 
     public void addCategory(Category category) {
-        if (category == null ) {
+        if (category == null) {
             throw new IllegalArgumentException("Category must not be null or empty");
         }
-        if (checkForDuplicates() == true ) {
-            System.out.println ("This Category already added to the store");
+        if (!checkForDuplicates(category)) {
+            categoryList.add(category);
+        } else {
+            System.out.println("This Category already added to the store");
         }
-
-        categoryList.add(category);
     }
 
     public List<Category> getCategoryList() {
@@ -44,9 +44,9 @@ public class Store {
         categoryList.clear();
     }
 
-    public boolean checkForDuplicates (){
-        Set<Category> set = new HashSet<Category> (categoryList);
-        return set.size() < categoryList.size();
+
+    public boolean checkForDuplicates(Category category) {
+        return categoryList.contains(category);
     }
 }
 
