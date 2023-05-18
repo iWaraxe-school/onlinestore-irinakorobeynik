@@ -1,4 +1,4 @@
 package com.coherentsolutions.sorting;
 
-public class Comparator {
+public class ProductComparator {
 }
