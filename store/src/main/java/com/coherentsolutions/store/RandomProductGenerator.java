@@ -9,6 +9,7 @@ public class RandomProductGenerator {
     private static final int MAX_RATE = 10;
     private final Faker faker = new Faker();
 
+    /* generates string value based on category selected (Book,Food,Phone)*/
     public String generateName(String category) {
         if (category == null || category.trim().isEmpty()) {
             throw new IllegalArgumentException("Category must not be null or empty");
