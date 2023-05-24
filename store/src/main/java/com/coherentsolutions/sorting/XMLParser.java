@@ -11,15 +11,15 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class XMLParser {
-    private Map<String, SortingTypes> sortingOptions = new HashMap<>();
+    private Map<String, SortingTypes> sortingOptions = new LinkedHashMap<>();
     public static final String FILE_PATH = "store/src/main/resources/config.xml";
     public static final String ROOT_TAG = "sort";
     public void parseSortOptions() {
         try {
-            Map<String, String> sortingOptions = new HashMap<>();
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(FILE_PATH);
