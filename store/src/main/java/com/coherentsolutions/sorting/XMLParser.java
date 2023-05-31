@@ -16,13 +16,12 @@ import java.util.Map;
 
 public class XMLParser {
     private Map<String, SortingTypes> sortingOptions = new LinkedHashMap<>();
-    public static final String FILE_PATH = "store/src/main/resources/config.xml";
     public static final String ROOT_TAG = "sort";
-    public void parseSortOptions() {
+    public void parseSortOptions(String filePath) {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(FILE_PATH);
+            Document doc = builder.parse(filePath);
             NodeList sortList = doc.getElementsByTagName(ROOT_TAG);
             Node p = sortList.item(0);
             Element sort = (Element) p;
@@ -37,6 +36,10 @@ public class XMLParser {
         } catch (ParserConfigurationException | IOException | SAXException e) {
             System.err.println("Error occurred while parsing the config file: " + e.getMessage());
         }
+    }
+
+    public Map<String, SortingTypes> getParsedMap(){
+        return this.sortingOptions;
     }
 }
 

@@ -1,6 +1,7 @@
 package com.coherentsolutions.store;
 
 import com.coherentsolutions.domain.Category;
+import com.coherentsolutions.domain.Product;
 import org.yaml.snakeyaml.constructor.DuplicateKeyException;
 
 import java.util.ArrayList;
@@ -38,6 +39,14 @@ public class Store {
                 System.out.println();
             }
         }
+    }
+
+    public List<Product> getAllProducts() {
+        List<Product> listOfAllProducts = new ArrayList<>();
+        for (Category category : categoryList) {
+            listOfAllProducts.addAll(category.getProductList());
+        }
+        return listOfAllProducts;
     }
 
     public void deleteAll() {
