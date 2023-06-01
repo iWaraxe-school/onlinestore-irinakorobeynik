@@ -34,18 +34,13 @@ public class Store {
         if (categoryList.isEmpty()) {
             System.out.println("Store is empty");
         } else {
-            for (Category category : categoryList) {
-                category.printCategoryWithProducts();
-                System.out.println();
-            }
+            categoryList.forEach(category -> category.printCategoryWithProducts());
         }
     }
 
     public List<Product> getAllProducts() {
         List<Product> listOfAllProducts = new ArrayList<>();
-        for (Category category : categoryList) {
-            listOfAllProducts.addAll(category.getProductList());
-        }
+        categoryList.forEach(category ->listOfAllProducts.addAll(category.getProductList()));
         return listOfAllProducts;
     }
 

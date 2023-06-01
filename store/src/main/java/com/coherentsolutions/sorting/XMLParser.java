@@ -10,13 +10,14 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 public class XMLParser {
-    private Map<String, SortingTypes> sortingOptions = new LinkedHashMap<>();
+    private final Map<String, SortingTypes> sortingOptions = new LinkedHashMap<>();
     public static final String ROOT_TAG = "sort";
+
     public void parseSortOptions(String filePath) {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -26,19 +27,19 @@ public class XMLParser {
             Node p = sortList.item(0);
             Element sort = (Element) p;
             NodeList nameList = sort.getChildNodes();
-            for (int i = 0; i < nameList.getLength(); i++) {
-                Node n = nameList.item(i);
+            IntStream.range(0, nameList.getLength()).forEach(i ->
+            {Node n = nameList.item(i);
                 if (n.getNodeType() == Node.ELEMENT_NODE) {
                     Element name = (Element) n;
                     this.sortingOptions.put(name.getTagName(), SortingTypes.findByName(name.getTextContent()));
                 }
-            }
+            });
         } catch (ParserConfigurationException | IOException | SAXException e) {
             System.err.println("Error occurred while parsing the config file: " + e.getMessage());
         }
     }
 
-    public Map<String, SortingTypes> getParsedMap(){
+    public Map<String, SortingTypes> getParsedMap() {
         return this.sortingOptions;
     }
 }

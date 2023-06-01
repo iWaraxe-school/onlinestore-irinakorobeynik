@@ -12,13 +12,12 @@ public class StoreApp {
         Store onlinestore = new Store();
         RandomStorePopulator randomStorePopulator = new RandomStorePopulator(onlinestore);
         randomStorePopulator.fillStoreWithProduct();
-
         SortHelper sort = new SortHelper(onlinestore);
 
         while (true) {
             System.out.println("Enter number:");
             System.out.println("1 - get all products sorted based on XML config");
-            System.out.println("2 - get first 5 product with lowest price");
+            System.out.println("2 - get first 5 most expensive products");
             System.out.println("3 - print whole store");
             System.out.println("0 - End program");
             Scanner in = new Scanner(System.in);
