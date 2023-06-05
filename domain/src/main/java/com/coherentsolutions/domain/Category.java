@@ -26,7 +26,7 @@ public abstract class Category {
         this.productList = productList;
     }
 
-    public void addProduct (Product product){
+    public void addProduct(Product product) {
         productList.add(product);
     }
 
@@ -35,10 +35,7 @@ public abstract class Category {
             System.out.println("the Category " + name + " has no products");
         } else {
             System.out.println("The Category " + name + " has the following products:");
-
-            for (Product product : productList) {
-                System.out.println(product.toString());
-            }
+            productList.forEach(System.out::println);
         }
     }
 }

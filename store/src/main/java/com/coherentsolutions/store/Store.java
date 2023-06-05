@@ -1,12 +1,12 @@
 package com.coherentsolutions.store;
 
 import com.coherentsolutions.domain.Category;
-import org.yaml.snakeyaml.constructor.DuplicateKeyException;
-
+import com.coherentsolutions.domain.Product;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
+
 
 public class Store {
     private List<Category> categoryList = new ArrayList<>();
@@ -33,11 +33,15 @@ public class Store {
         if (categoryList.isEmpty()) {
             System.out.println("Store is empty");
         } else {
-            for (Category category : categoryList) {
-                category.printCategoryWithProducts();
-                System.out.println();
-            }
+            categoryList.forEach(category -> category.printCategoryWithProducts());
         }
+    }
+
+    public List<Product> getAllProducts() {
+       return categoryList.stream()
+                .map(Category::getProductList)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 
     public void deleteAll() {
@@ -45,8 +49,8 @@ public class Store {
     }
 
 
-    public boolean checkForDuplicates(Category category) {
-        return categoryList.contains(category);
+    public boolean checkForDuplicates(Category newCategory) {
+        return categoryList.stream().allMatch(category -> category.equals(newCategory));
     }
 }
 
