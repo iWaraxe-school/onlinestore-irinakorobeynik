@@ -2,6 +2,7 @@ package com.coherentsolutions.store;
 
 import com.coherentsolutions.domain.Category;
 import com.coherentsolutions.domain.Product;
+import com.coherentsolutions.domain.ProductBuilder;
 import org.reflections.Reflections;
 
 import java.lang.reflect.InvocationTargetException;
@@ -28,14 +29,14 @@ public class RandomStorePopulator {
         RandomProductGenerator randomProductGenerator = new RandomProductGenerator();
         fillStoreWithCategories();
         List<Category> categoryList = this.store.getCategoryList();
-        categoryList.forEach(category -> {
-            IntStream.range(MIN_VALUE, MAX_VALUE).forEach(i -> {
-                Product product = new Product(randomProductGenerator.generateName(category.getName()),
-                        randomProductGenerator.generateRate(),
-                        randomProductGenerator.generatePrice());
-                category.addProduct(product);
-            });
-        });
+        categoryList.forEach(category -> IntStream.range(MIN_VALUE, MAX_VALUE).forEach(i -> {
+            Product product = new ProductBuilder()
+                    .setName(randomProductGenerator.generateName(category.getName()))
+                            .setRate(randomProductGenerator.generateRate())
+                            .setPrice(randomProductGenerator.generatePrice())
+                            .build();
+            category.addProduct(product);
+        }));
     }
 
     /* creates instances of classes that extends

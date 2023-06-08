@@ -10,9 +10,23 @@ import java.util.stream.Collectors;
 
 
 public class Store {
+    private static volatile Store instance;
     private final List<Category> categoryList = new ArrayList<>();
 
-    public Store() {
+    private Store() {
+    }
+
+    public static Store getInstance() {
+        Store result = instance;
+        if (result != null) {
+            return result;
+        }
+        synchronized (Store.class) {
+            if (instance == null) {
+                instance = new Store();
+            }
+            return instance;
+        }
     }
 
     public void addCategory(Category category) {

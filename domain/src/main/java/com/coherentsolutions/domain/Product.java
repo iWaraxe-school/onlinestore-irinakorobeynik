@@ -5,42 +5,24 @@ public class Product {
     private int rate;
     private int price;
 
+    public Product(ProductBuilder productBuilder) {
+        this.name = productBuilder.getName();
+        this.rate = productBuilder.getRate();
+        this.price = productBuilder.getPrice();
 
-    public Product(String name, int rate, int price) {
-        this.name = name;
-        this.rate = rate;
-        this.price = price;
     }
-
     public String getName() {
         return name;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getRate() {
+    public double getRate() {
         return rate;
     }
-
-    public void setRate(int rate) {
-        this.rate = rate;
-    }
-
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
     @Override
     public String toString() {
-
         return String.format("- Product %s has %2s rate and %3s price", name,rate,price);
-
     }
 
 
