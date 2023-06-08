@@ -12,11 +12,7 @@ public enum SortingTypes {
                 }
             }
         }
-        try {
-            return null;
-        } catch (NullPointerException e) {
-            throw new IllegalArgumentException("Inappropriate value");
-        }
+        return asc;
 
     }
 }
