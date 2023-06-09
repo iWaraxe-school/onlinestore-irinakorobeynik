@@ -1,7 +1,7 @@
 package com.coherentsolutions.domain;
 
-public class PhoneCategory extends Category{
+public class PhoneCategory extends Category {
     public PhoneCategory() {
-        super("Phone");
+        super(CategoryType.PHONE.toString());
     }
 }
