@@ -5,20 +5,35 @@ import com.coherentsolutions.domain.Product;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
 public class Store {
-    private List<Category> categoryList = new ArrayList<>();
+    private static volatile Store instance;
+    private final List<Category> categoryList = new ArrayList<>();
 
-    public Store() {
+    private Store() {
+    }
+
+    public static Store getInstance() {
+        Store result = instance;
+        if (result != null) {
+            return result;
+        }
+        synchronized (Store.class) {
+            if (instance == null) {
+                instance = new Store();
+            }
+            return instance;
+        }
     }
 
     public void addCategory(Category category) {
         if (category == null) {
             throw new IllegalArgumentException("Category must not be null or empty");
         }
-        if (!checkForDuplicates(category)) {
+        else if (!isCategoryPresent(category)) {
             categoryList.add(category);
         } else {
             System.out.println("This Category already added to the store");
@@ -29,28 +44,32 @@ public class Store {
         return categoryList;
     }
 
-    public void printCategoryWithProducts() {
+    public void printCategoriesWithProducts() {
         if (categoryList.isEmpty()) {
             System.out.println("Store is empty");
         } else {
-            categoryList.forEach(category -> category.printCategoryWithProducts());
+            categoryList.forEach(Category::printCategoryWithProducts);
         }
     }
 
     public List<Product> getAllProducts() {
-       return categoryList.stream()
-                .map(Category::getProductList)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
+        try {
+            return categoryList.stream()
+                    .map(Category::getProductList)
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toList());
+        }
+         catch (NullPointerException e) {
+            throw new IllegalArgumentException("No products in the store");
+        }
     }
 
     public void deleteAll() {
         categoryList.clear();
     }
 
-
-    public boolean checkForDuplicates(Category newCategory) {
-        return categoryList.stream().allMatch(category -> category.equals(newCategory));
+    public boolean isCategoryPresent(Category newCategory) {
+        return categoryList.stream().anyMatch(category -> category.equals(newCategory));
     }
 }
 

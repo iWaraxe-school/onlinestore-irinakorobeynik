@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 public class SortHelper {
     public static final String FILE_PATH = "store/src/main/resources/config.xml";
     private Store store;
-    List <Product> productList;
+    List<Product> productList;
     ProductComparator comparator;
 
     public SortHelper(Store store) {
@@ -23,21 +23,26 @@ public class SortHelper {
 
     }
 
-    public void sortProductsByXML(){
-        List <Product> sortedList =productList.stream()
+    public void sortProductsByXML() {
+        List<Product> sortedList = productList.stream()
                 .sorted(comparator)
                 .collect(Collectors.toList());
         printListProduct(sortedList);
     }
 
-    public void getTopFiveProducts(){
-        List<Product> sortedList = productList.stream()
-                .sorted(Comparator.comparing(Product::getPrice).reversed())
-                .limit(5)
-                .collect(Collectors.toList());
-        printListProduct(sortedList);
+    public void getTopFiveProducts() {
+        if (productList.size() >= 5) {
+            List<Product> sortedList = productList.stream()
+                    .sorted(Comparator.comparing(Product::getPrice).reversed())
+                    .limit(5)
+                    .collect(Collectors.toList());
+            printListProduct(sortedList);
+        } else {
+            System.out.println("Product has less than 5 products");
+        }
 
     }
+
     public void printListProduct(List<Product> productList) {
         productList.forEach(System.out::println);
     }

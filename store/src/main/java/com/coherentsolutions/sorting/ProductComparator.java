@@ -1,6 +1,7 @@
 package com.coherentsolutions.sorting;
 
 import com.coherentsolutions.domain.Product;
+import com.coherentsolutions.domain.ProductBuilder;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -36,10 +37,10 @@ public class ProductComparator implements Comparator<Product> {
                 return o1.getName().compareTo(o2.getName());
             }
             case "price": {
-                return o1.getPrice()-o2.getPrice();
+                return (int) (o1.getPrice()-(o2.getPrice()));
             }
             case "rate": {
-                return o1.getRate()-o2.getRate();
+                return (int) (o1.getRate()-o2.getRate());
             }
             default:
                 return 0;

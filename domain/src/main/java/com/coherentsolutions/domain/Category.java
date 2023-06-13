@@ -31,11 +31,13 @@ public abstract class Category {
     }
 
     public void printCategoryWithProducts() {
+        StringBuilder builder = new StringBuilder();
         if (productList.isEmpty()) {
-            System.out.println("the Category " + name + " has no products");
+            builder.append("the Category " + name + " has no products");
         } else {
-            System.out.println("The Category " + name + " has the following products:");
-            productList.forEach(System.out::println);
+            builder.append("The Category " + name + " has the following products: " + "\n");
+            productList.stream().map(product -> product + "\n").forEach(builder::append);
         }
+        System.out.println(builder);
     }
 }
