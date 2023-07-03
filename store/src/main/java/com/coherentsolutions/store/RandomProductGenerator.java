@@ -15,11 +15,11 @@ public class RandomProductGenerator {
             throw new IllegalArgumentException("Category must not be null or empty");
         }
         switch (category) {
-            case "BOOK":
+            case "Book":
                 return faker.book().title();
-            case "FOOD":
+            case "Food":
                 return faker.food().dish();
-            case "PHONE":
+            case "Phone":
                 return faker.company().name();
             default:
                 throw new IllegalArgumentException("Invalid category: " + category);

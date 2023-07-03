@@ -1,12 +1,12 @@
 package com.coherentsolutions.domain;
 
 public class ProductBuilder {
-    private static String name;
+    private String name;
     private int rate;
     private int price;
     public ProductBuilder() {
     }
-    public static String getName() {
+    public String getName() {
         return name;
     }
 
