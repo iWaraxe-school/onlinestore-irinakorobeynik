@@ -1,7 +1,6 @@
 package com.coherentsolutions.sorting;
 
 import com.coherentsolutions.domain.Product;
-import com.coherentsolutions.domain.Category;
 import com.coherentsolutions.store.Store;
 
 import java.util.*;

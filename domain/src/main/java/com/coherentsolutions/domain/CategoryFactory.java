@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class CategoryFactory {
     List<Category> categorylist = new ArrayList<Category>();
-    public List<Category> createCategory(CategoryType type) {
+    public Category createCategory(CategoryType type) {
 
         Category category = null;
         switch (type) {
@@ -21,6 +21,6 @@ public class CategoryFactory {
                 break;
         }
         categorylist.add(category);
-        return categorylist;
+        return category;
     }
 }
