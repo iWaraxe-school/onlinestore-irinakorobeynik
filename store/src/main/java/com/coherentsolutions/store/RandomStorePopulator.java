@@ -1,6 +1,7 @@
 package com.coherentsolutions.store;
 
 import com.coherentsolutions.domain.Category;
+import com.coherentsolutions.domain.CategoryFactory;
 import com.coherentsolutions.domain.Product;
 import com.coherentsolutions.domain.ProductBuilder;
 import org.reflections.Reflections;
@@ -44,7 +45,7 @@ public class RandomStorePopulator {
     private void fillStoreWithCategories() {
         Reflections reflections = new Reflections("com.coherentsolutions.domain");
         Set<Class<? extends Category>> allClasses = reflections.getSubTypesOf(Category.class);
-        List<Category> categoryList = new ArrayList<>();
+        CategoryFactory categoryFactory = new CategoryFactory();
         allClasses.forEach(allClass -> {
             try {
                 this.store.addCategory(allClass.getConstructor().newInstance());

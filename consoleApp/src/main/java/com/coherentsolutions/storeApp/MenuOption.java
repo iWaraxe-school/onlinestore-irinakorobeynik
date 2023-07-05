@@ -13,5 +13,4 @@ public enum MenuOption {
         }
         return MenuOption.QUIT;
     }
-
 }
