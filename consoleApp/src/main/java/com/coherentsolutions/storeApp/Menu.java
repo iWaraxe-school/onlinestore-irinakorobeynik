@@ -51,6 +51,8 @@ public class Menu {
                 case ORDER:
                     Runnable createOrder = new CreateOrder();
                     new Thread(createOrder).start();
+                    Runnable clearOrder = new ClearOrder();
+                    new Thread(clearOrder).start();
                     break;
             }
         }

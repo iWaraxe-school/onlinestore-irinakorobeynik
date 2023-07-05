@@ -4,10 +4,10 @@ import com.coherentsolutions.domain.Category;
 import com.coherentsolutions.domain.CategoryType;
 import com.coherentsolutions.domain.Product;
 import com.coherentsolutions.domain.ProductBuilder;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 public class Store {
@@ -75,10 +75,10 @@ public class Store {
         return categoryList.stream().anyMatch(category -> category.equals(newCategory));
     }
 
-    public Product selectRandomProduct() {
+    public Product generateRandomProduct() {
         RandomProductGenerator products = new RandomProductGenerator();
         Product product = new ProductBuilder()
-                .setName(products.generateName(CategoryType.getRandomTypeName()))
+                .setName(products.generateName(StringUtils.capitalize(CategoryType.getRandomTypeName().toLowerCase())))
                 .setRate(products.generateRate())
                 .setPrice(products.generatePrice())
                 .build();
