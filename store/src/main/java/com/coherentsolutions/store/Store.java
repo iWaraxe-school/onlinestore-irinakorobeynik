@@ -1,24 +1,29 @@
 package com.coherentsolutions.store;
 
+import com.coherentsolutions.db.CategoriesDAO;
+import com.coherentsolutions.db.ProductsDAO;
 import com.coherentsolutions.domain.Category;
 import com.coherentsolutions.domain.CategoryType;
 import com.coherentsolutions.domain.Product;
 import com.coherentsolutions.domain.ProductBuilder;
-import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Store {
     private static volatile Store instance;
     private final List<Category> categoryList = new ArrayList<>();
+    private CategoriesDAO categoriesDBHelper;
+    private ProductsDAO productsDBHelper;
 
     public final int MAX_RANDOM_VALUE = 10;
     public final int MIN_RANDOM_VALUE = 1;
 
 
     private Store() {
+        categoriesDBHelper = new CategoriesDAO();
+        productsDBHelper = new ProductsDAO();
     }
 
     public static Store getInstance() {
@@ -49,19 +54,19 @@ public class Store {
     }
 
     public void printCategoriesWithProducts() {
-        if (categoryList.isEmpty()) {
+        List<Category> allCategories = categoriesDBHelper.getAllCategories();
+        if (allCategories.isEmpty()) {
             System.out.println("Store is empty");
         } else {
-            categoryList.forEach(Category::printCategoryWithProducts);
+            allCategories.forEach(category -> {
+                categoriesDBHelper.printCategoryWithProductsDB(category);
+            });
         }
     }
 
     public List<Product> getAllProducts() {
         try {
-            return categoryList.stream()
-                    .map(Category::getProductList)
-                    .flatMap(Collection::stream)
-                    .collect(Collectors.toList());
+            return productsDBHelper.getAllProducts();
         } catch (NullPointerException e) {
             throw new IllegalArgumentException("No products in the store");
         }
@@ -78,12 +83,11 @@ public class Store {
     public Product generateRandomProduct() {
         RandomProductGenerator products = new RandomProductGenerator();
         Product product = new ProductBuilder()
-                .setName(products.generateName(StringUtils.capitalize(CategoryType.getRandomTypeName().toLowerCase())))
+                .setName(products.generateName(CategoryType.getRandomTypeName()))
                 .setRate(products.generateRate())
                 .setPrice(products.generatePrice())
                 .build();
         return product;
     }
-
 }
 

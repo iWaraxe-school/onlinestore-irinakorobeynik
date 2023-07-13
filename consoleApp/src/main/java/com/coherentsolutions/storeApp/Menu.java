@@ -1,5 +1,6 @@
 package com.coherentsolutions.storeApp;
 
+import com.coherentsolutions.db.DBHelper;
 import com.coherentsolutions.order.ClearOrder;
 import com.coherentsolutions.order.CreateOrder;
 import com.coherentsolutions.sorting.SortHelper;

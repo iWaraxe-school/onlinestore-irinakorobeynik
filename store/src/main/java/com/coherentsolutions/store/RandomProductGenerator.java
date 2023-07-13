@@ -14,12 +14,12 @@ public class RandomProductGenerator {
         if (category == null || category.trim().isEmpty()) {
             throw new IllegalArgumentException("Category must not be null or empty");
         }
-        switch (category) {
-            case "Book":
+        switch (category.toUpperCase()) {
+            case "BOOK":
                 return faker.book().title();
-            case "Food":
-                return faker.food().dish();
-            case "Phone":
+            case "FOOD":
+                return faker.food().ingredient();
+            case "PHONE":
                 return faker.company().name();
             default:
                 throw new IllegalArgumentException("Invalid category: " + category);

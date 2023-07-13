@@ -1,10 +1,9 @@
 package com.coherentsolutions.order;
+
 import com.coherentsolutions.store.Store;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
-
-import static org.reflections.Reflections.log;
 
 public class CreateOrder implements Runnable {
     private Order order = Order.getInstance();
@@ -18,7 +17,7 @@ public class CreateOrder implements Runnable {
         try {
             TimeUnit.SECONDS.sleep(randomNumber);
         } catch (InterruptedException e) {
-            log.error("Thread was interrupted", e);
+            Thread.currentThread().interrupt();
         }
         System.out.println("Finish thread " + Thread.currentThread().getName());
 

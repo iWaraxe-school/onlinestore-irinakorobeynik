@@ -14,10 +14,10 @@ public class Product {
     public String getName() {
         return name;
     }
-    public double getRate() {
+    public int getRate() {
         return rate;
     }
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
     @Override

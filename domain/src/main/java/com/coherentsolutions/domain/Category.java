@@ -1,10 +1,11 @@
 package com.coherentsolutions.domain;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Category {
     private String name;
-    private List<Product> productList = new ArrayList<Product>();
+
+    private static List<Product> productList = new ArrayList<Product>();
 
     public Category(String name) {
         this.name = name;
@@ -26,7 +27,7 @@ public abstract class Category {
         this.productList = productList;
     }
 
-    public void addProduct(Product product) {
+    public static void addProduct(Product product) {
         productList.add(product);
     }
 

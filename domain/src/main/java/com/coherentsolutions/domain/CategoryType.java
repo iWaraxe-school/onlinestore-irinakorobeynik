@@ -10,9 +10,15 @@ public enum CategoryType {
 
 
     public static String getRandomTypeName(){
-        List<String> enumNames = Stream.of(CategoryType.values())
-                .map(CategoryType::name)
-                .collect(Collectors.toList());
+        List<String> enumNames = getCategoryTypesList();
         return enumNames.get(new Random().nextInt(enumNames.size()));
     }
+
+
+    public static List <String> getCategoryTypesList(){
+        return Stream.of(CategoryType.values())
+                .map(CategoryType::name)
+                .collect(Collectors.toList());
+    }
+
 }

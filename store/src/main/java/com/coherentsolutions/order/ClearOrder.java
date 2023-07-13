@@ -2,8 +2,6 @@ package com.coherentsolutions.order;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.reflections.Reflections.log;
-
 public class ClearOrder implements Runnable {
     private Order order = Order.getInstance();
     private Thread currentThread;
@@ -15,7 +13,7 @@ public class ClearOrder implements Runnable {
             try {
                 TimeUnit.MINUTES.sleep(1);
             } catch (InterruptedException e) {
-                log.error("Thread was interrupted", e);
+                Thread.currentThread().interrupt();
             }
             order.emptyOrder();
             System.out.println("Cart is empty");
