@@ -2,11 +2,10 @@ package com.coherentsolutions.domain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class CategoryFactory {
-    List<Category> categorylist = new ArrayList<Category>();
-    public Category createCategory(CategoryType type) {
+    static List<Category> categorylist = new ArrayList<Category>();
+    public static Category createCategory(CategoryType type) {
 
         Category category = null;
         switch (type) {

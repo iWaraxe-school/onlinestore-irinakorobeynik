@@ -1,4 +1,5 @@
 package com.coherentsolutions.order;
+
 import com.coherentsolutions.store.Store;
 
 import java.util.Random;
@@ -11,19 +12,14 @@ public class CreateOrder implements Runnable {
         Random random = new Random();
         int randomNumber = random.nextInt(30);
         System.out.println("Start Thread " + Thread.currentThread().getName());
-        order.addProductToCart(Store.getInstance().selectRandomProduct());
+        order.addProductToCart(Store.getInstance().generateRandomProduct());
         order.printOrder();
         try {
             TimeUnit.SECONDS.sleep(randomNumber);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            Thread.currentThread().interrupt();
         }
         System.out.println("Finish thread " + Thread.currentThread().getName());
-        Runnable clearOrder = new ClearOrder();
-        new Thread(clearOrder).start();
-
-
-
 
     }
 }
