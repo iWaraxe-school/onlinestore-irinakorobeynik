@@ -16,13 +16,12 @@ public class ProductComparator implements Comparator<Product> {
     @Override
     public int compare(Product o1, Product o2) {
         for (Map.Entry<String, SortingTypes> sortEntry : sortingOption.entrySet()) {
-            String sortOrder = sortEntry.getValue().name();
             String sortField = sortEntry.getKey();
             int result = sortASCBySortField(sortField, o1, o2);
             if (result != 0) {
-                if (sortOrder.equals(SortingTypes.asc.name())) {
+                if (sortEntry.getValue() == SortingTypes.asc) {
                     return result;
-                } else if (sortOrder.equals(SortingTypes.desc.name())) {
+                } else if (sortEntry.getValue() == SortingTypes.desc) {
                     return result * -1;
                 }
             }
@@ -42,7 +41,7 @@ public class ProductComparator implements Comparator<Product> {
                 return  o1.getRate()-o2.getRate();
             }
             default:
-                return 0;
+                throw new IllegalArgumentException("Invalid soritng value");
         }
     }
 

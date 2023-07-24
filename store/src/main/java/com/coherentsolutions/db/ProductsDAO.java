@@ -65,12 +65,4 @@ public class ProductsDAO extends DBHelper {
         }
     }
 
-    public void deleteProductsTable (){
-        try (Connection connection = DBHelper.setConnection();) {
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(String.format("DROP TABLE PRODUCTS"));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

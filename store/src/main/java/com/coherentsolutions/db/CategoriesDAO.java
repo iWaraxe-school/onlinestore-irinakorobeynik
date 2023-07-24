@@ -111,13 +111,6 @@ public class CategoriesDAO extends DBHelper {
         }
     }
 
-    public void deleteCategoriesTable (){
-        try (Connection connection = DBHelper.setConnection();) {
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(String.format("DROP TABLE CATEGORIES"));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 
 }

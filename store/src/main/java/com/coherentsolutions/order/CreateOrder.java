@@ -5,6 +5,8 @@ import com.coherentsolutions.store.Store;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import static org.reflections.Reflections.log;
+
 public class CreateOrder implements Runnable {
     private Order order = Order.getInstance();
     @Override
@@ -18,6 +20,7 @@ public class CreateOrder implements Runnable {
             TimeUnit.SECONDS.sleep(randomNumber);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+            log.error("Thread was interrupted", e);
         }
         System.out.println("Finish thread " + Thread.currentThread().getName());
 
