@@ -1,16 +1,28 @@
 package com.coherentsolutions.db;
-import java.sql.*;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Properties;
 
 public class DBHelper {
 
-    public final static String URL = "jdbc:sqlserver://localhost:1433;DatabaseName=online-store;integratedSecurity=true;encrypt=true;trustServerCertificate=true";
+    static Properties prop = new Properties();
+    public final static String URL = prop.getProperty("sqlUrl");
 
     public static Connection setConnection() {
-        try {
+        try (InputStream input = Files.newInputStream(Paths.get("store/src/main/resources/config.properties"));) {
+            Properties prop = new Properties();
+            prop.load(input);
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            return DriverManager.getConnection(URL);
-        } catch (ClassNotFoundException | SQLException e) {
-            throw new RuntimeException(e);
+            return DriverManager.getConnection(prop.getProperty("sqlUrl"));
+        } catch (IOException | ClassNotFoundException | SQLException e) {
+            throw new RuntimeException();
         }
     }
 
