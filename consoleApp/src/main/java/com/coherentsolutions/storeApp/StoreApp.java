@@ -15,10 +15,9 @@ public class StoreApp {
         Store onlinestore = Store.getInstance();
         RandomStorePopulator randomStorePopulator = new RandomStorePopulator(onlinestore);
         randomStorePopulator.fillStoreWithProduct();
-/*        Menu menu = new Menu(onlinestore);
-        menu.showMenu();*/
         Server.runServer();
         Client.OrderProduct();
+
 
 
     }

@@ -14,15 +14,16 @@ public class Server {
         try {
             server = HttpServer.create();
             server.bind(new InetSocketAddress(8080), 0);
+            HttpContext allProductPage = server.createContext("/", new MainPage());
+            HttpContext order = server.createContext("/order", new OrderPage());
+            allProductPage.setAuthenticator(new Auth("get"));
+            order.setAuthenticator(new Auth("post"));
+            server.setExecutor(null);
+            server.start();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            serverStop();
+            throw new RuntimeException("Something wrong with server start : " + e);
         }
-        HttpContext allProductPage = server.createContext("/", new MainPage());
-        HttpContext order = server.createContext("/order", new OrderPage());
-        allProductPage.setAuthenticator(new Auth("get"));
-        order.setAuthenticator(new Auth("get"));
-        server.setExecutor(null);
-        server.start();
     }
 
     public static void handleResponse(HttpExchange exchange, String data) throws IOException {
@@ -31,4 +32,10 @@ public class Server {
         out.write(data.getBytes());
         out.close();
     }
+
+    public static void serverStop() {
+        System.exit(0);
+    }
+
+
 }

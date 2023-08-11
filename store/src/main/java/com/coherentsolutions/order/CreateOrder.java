@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 
 public class CreateOrder implements Runnable {
-    private static Logger log = Logger.getLogger(CreateOrder.class.getName());
+    private static Logger log = Logger.getLogger("com.coherentsolutions");
     private Order order = Order.getInstance();
 
     @Override

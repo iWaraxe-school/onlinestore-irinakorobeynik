@@ -1,6 +1,5 @@
 package com.coherentsolutions.storeApp;
 
-import com.coherentsolutions.db.DBHelper;
 import com.coherentsolutions.order.ClearOrder;
 import com.coherentsolutions.order.CreateOrder;
 import com.coherentsolutions.sorting.SortHelper;
@@ -37,7 +36,7 @@ public class Menu {
         while (true) {
             printMenu();
             String consoleInput = scanner.nextLine();
-            switch (menuOption.findByName(consoleInput)) {
+            switch (MenuOption.findByName(consoleInput)) {
                 case QUIT:
                     return;
                 case SORT:

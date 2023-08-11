@@ -14,7 +14,7 @@ public class DBHelper {
     private static Properties prop;
 
  public DBHelper(){
-     try (InputStream input = Files.newInputStream(Paths.get("store/src/main/resources/config.properties"))) {
+     try (InputStream input = Files.newInputStream(Paths.get("store/src/main/resources/application.properties"))) {
          prop = new Properties();
          prop.load(input);
          Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -27,7 +27,7 @@ public class DBHelper {
         try {
             return DriverManager.getConnection(DBHelper.prop.getProperty("sqlUrl"));
         } catch (SQLException e) {
-            throw new RuntimeException("Something wrong with setting connection");
+            throw new RuntimeException("Something wrong with setting connection" + e);
         }
     }
 
@@ -42,7 +42,7 @@ public class DBHelper {
     }
 
     public void clearDB() {
-        try (Connection connection = setConnection()) {
+       try (Connection connection = setConnection()) {
             boolean productsExist = connection.getMetaData().getTables(null,null, "PRODUCTS", null).next();
             boolean categoriesExist = connection.getMetaData().getTables(null,null, "CATEGORIES", null).next();
             if (productsExist || categoriesExist){
@@ -50,7 +50,7 @@ public class DBHelper {
             statement.executeUpdate("DROP TABLE PRODUCTS");
            statement.executeUpdate("DROP TABLE CATEGORIES");}
         } catch (SQLException e) {
-            throw new RuntimeException("DB cannot be prepared for command execution.");
+            throw new RuntimeException("DB cannot be prepared for command execution.:" +e);
         }
     }
 

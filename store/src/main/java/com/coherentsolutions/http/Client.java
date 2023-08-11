@@ -15,7 +15,7 @@ import java.util.Properties;
 
 public class Client {
     public static void OrderProduct() {
-        try (InputStream input = Files.newInputStream(Paths.get("store/src/main/resources/config.properties"))) {
+        try (InputStream input = Files.newInputStream(Paths.get("store/src/main/resources/application.properties"))) {
             Properties prop = new Properties();
             prop.load(input);
             Product orderedProduct = ProductsDAO.getRandomProduct();
@@ -23,7 +23,7 @@ public class Client {
             String productJson = g.toJson(orderedProduct);
 
             System.out.println(productJson);
-            RestAssured.baseURI = "http://localhost:8080/";
+            RestAssured.baseURI = prop.getProperty("url");
             RequestSpecification request = RestAssured.given();
             request.header("Content-Type", "application/json");
             request.auth().basic(prop.getProperty("user"), prop.getProperty("password"));
@@ -34,7 +34,7 @@ public class Client {
             System.out.println("Response body: " + response.getBody().asString());
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Something wrong with ordering product page: " + e);
         }
     }
 }

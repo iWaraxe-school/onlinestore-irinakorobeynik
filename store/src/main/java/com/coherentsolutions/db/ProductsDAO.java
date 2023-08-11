@@ -1,21 +1,26 @@
 package com.coherentsolutions.db;
 
+import com.coherentsolutions.domain.Category;
 import com.coherentsolutions.domain.Product;
 import com.coherentsolutions.domain.ProductBuilder;
+import com.coherentsolutions.store.RandomProductGenerator;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 public class ProductsDAO extends DBHelper {
+    /* used for generation random number that more than 0*/
+    private static int MIN_NUMBER = 1;
 
     public void createProductsTable() {
         try (Connection connection = DBHelper.setConnection()) {
             Statement statement = connection.createStatement();
             statement.executeUpdate("CREATE TABLE PRODUCTS (ID int IDENTITY(1,1) PRIMARY KEY, CATEGORY_ID INT, NAME varchar(255), PRICE INT, RATE INT, ORDERED BIT DEFAULT 0)");
         } catch (SQLException e) {
-            throw new RuntimeException("Something wrong with product table creation");
+            throw new RuntimeException("Something wrong with product table creation:" + e);
         }
     }
 
@@ -23,13 +28,13 @@ public class ProductsDAO extends DBHelper {
         try (Connection connection = DBHelper.setConnection()) {
             String sqlScript = "INSERT INTO PRODUCTS (CATEGORY_ID, NAME, PRICE, RATE) VALUES (?, ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlScript);
-            preparedStatement.setInt(1,categoryId);
+            preparedStatement.setInt(1, categoryId);
             preparedStatement.setString(2, product.getName());
             preparedStatement.setInt(3, product.getPrice());
             preparedStatement.setInt(4, product.getRate());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Something wrong with product creation");
+            throw new RuntimeException("Something wrong with product creation:" + e);
         }
     }
 
@@ -47,18 +52,18 @@ public class ProductsDAO extends DBHelper {
                 products.add(product);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Something wrong with getting product list");
+            throw new RuntimeException("Something wrong with getting product list:" + e);
         }
         return products;
     }
 
     public static Product getRandomProduct() {
         List<Product> products = getAllProducts();
-        int randomProductNumber = new Random().nextInt(products.size()) ;
+        int randomProductNumber = new Random().nextInt((products.size()) - MIN_NUMBER +1) +MIN_NUMBER;
         Product product = null;
         try (Connection connection = DBHelper.setConnection()) {
             if (randomProductNumber > 0) {
-                String sqlScript = "SELECT * FROM PRODUCTS where id = ?";
+                String sqlScript = "SELECT * FROM PRODUCTS WHERE ID = ?";
                 PreparedStatement preparedStatement = connection.prepareStatement(sqlScript);
                 preparedStatement.setInt(1, randomProductNumber);
                 ResultSet resultSet = preparedStatement.executeQuery();
@@ -70,12 +75,11 @@ public class ProductsDAO extends DBHelper {
                             .build();
                 }
                 return product;
-            }
-           else {
-               throw  new NullPointerException("no products in the store");
+            } else {
+                throw new NullPointerException("no products in the store");
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Something wrong with getting random product");
+            throw new RuntimeException("Something wrong with getting random product:" + e);
         }
 
     }
@@ -93,18 +97,18 @@ public class ProductsDAO extends DBHelper {
                         resultSet.getInt("RATE"), resultSet.getInt("PRICE"));
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Something wrong with product printing");
+            throw new RuntimeException("Something wrong with product printing:" + e);
         }
     }
 
     public static void addToCart(Product product) {
         try (Connection connection = DBHelper.setConnection();) {
-            String sqlScript = "Update PRODUCTS set ORDERED = 1 WHERE NAME = ?";
+            String sqlScript = "UPDATE PRODUCTS SET ORDERED = 1 WHERE NAME = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlScript);
-            preparedStatement.setString(1,product.getName().replace("\"", ""));
+            preparedStatement.setString(1, product.getName().replace("\"", ""));
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Something wrong with adding into cart");
+            throw new RuntimeException("Something wrong with adding into cart:" + e);
         }
     }
 
@@ -112,7 +116,7 @@ public class ProductsDAO extends DBHelper {
         Product product = null;
         try (Connection connection = DBHelper.setConnection();) {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM PRODUCTS where ORDERED = 1");
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM PRODUCTS WHERE ORDERED = 1");
             while (resultSet.next()) {
                 product = new ProductBuilder()
                         .setName(resultSet.getString("NAME"))
@@ -122,9 +126,24 @@ public class ProductsDAO extends DBHelper {
 
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Something wrong with getting ordered product");
+            throw new RuntimeException("Something wrong with getting ordered product:" + e);
         }
         return product;
+    }
+
+    public void fillStoreWithProduct(int minValue, int maxValue, List<Category> categoryList) {
+        CategoriesDAO categoriesDAO = new CategoriesDAO();
+        RandomProductGenerator randomProductGenerator = new RandomProductGenerator();
+        createProductsTable();
+        categoriesDAO.fillStoreWithCategories();
+        categoryList = CategoriesDAO.getAllCategories();
+        categoryList.forEach(category -> {
+            IntStream.range(minValue, maxValue).mapToObj(i -> new ProductBuilder()
+                    .setName(randomProductGenerator.generateName(category.getName()))
+                    .setRate(randomProductGenerator.generateRate())
+                    .setPrice(randomProductGenerator.generatePrice())
+                    .build()).forEach(product -> addProductEntry(product, categoriesDAO.getCategoryId(category)));
+        });
     }
 
 }

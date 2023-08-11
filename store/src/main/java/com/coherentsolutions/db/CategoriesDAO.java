@@ -1,6 +1,7 @@
 package com.coherentsolutions.db;
 
 import com.coherentsolutions.domain.*;
+import com.coherentsolutions.store.Store;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.List;
 
 public class CategoriesDAO extends DBHelper {
 
-    public void createCategoriesTable() {
+    public static void createCategoriesTable() {
         try (Connection connection = DBHelper.setConnection();) {
             Statement statement = connection.createStatement();
             statement.executeUpdate( "CREATE TABLE CATEGORIES (ID int NOT NULL IDENTITY(1,1), "
@@ -20,7 +21,7 @@ public class CategoriesDAO extends DBHelper {
     }
 
 
-    public void addCategoryEntry(Category category) {
+    public static void addCategoryEntry(Category category) {
         try (Connection connection = DBHelper.setConnection();) {
             String sqlScript = "INSERT INTO CATEGORIES (NAME) VALUES (?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlScript);
@@ -42,13 +43,13 @@ public class CategoriesDAO extends DBHelper {
             resultSet.next();
             categoryId = resultSet.getInt("id");
         } catch (SQLException e) {
-            throw new RuntimeException("Something wrong with getting Category ID");
+            throw new RuntimeException("Something wrong with getting Category ID:" +e);
         }
         return categoryId;
     }
 
 
-    public List<Category> getAllCategories() {
+    public static List<Category> getAllCategories() {
         List<Category>сategoryList = new ArrayList<>();
         try (Connection connection = DBHelper.setConnection();) {
             Statement statement = connection.createStatement();
@@ -57,7 +58,7 @@ public class CategoriesDAO extends DBHelper {
                 сategoryList.add(CategoryFactory.createCategory(CategoryType.valueOf(rs.getString("NAME").toUpperCase())));
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Something wrong with getting CategoryList");
+            throw new RuntimeException("Something wrong with getting CategoryList:" +e);
         }
         return сategoryList;
 
@@ -79,7 +80,7 @@ public class CategoriesDAO extends DBHelper {
                 productList.add(product);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Something wrong with getting ProductList for Category");
+            throw new RuntimeException("Something wrong with getting ProductList for Category:" +e);
         }
         return productList;
     }
@@ -104,7 +105,18 @@ public class CategoriesDAO extends DBHelper {
             }
             System.out.println(builder);
         } catch (SQLException e) {
-            throw new RuntimeException("Something wrong with printing categories and products");
+            throw new RuntimeException("Something wrong with printing categories and products:" +e);
+        }
+    }
+
+    protected void fillStoreWithCategories() {
+         createCategoriesTable();
+        if (getAllCategories().isEmpty()){
+            List<String> categoryTypes = CategoryType.getCategoryTypesList();
+            categoryTypes.forEach(category -> {
+                addCategoryEntry(CategoryFactory.createCategory(CategoryType.valueOf(category.toUpperCase())));
+                Store.getInstance().addCategory(CategoryFactory.createCategory(CategoryType.valueOf(category)));
+            });
         }
     }
 
