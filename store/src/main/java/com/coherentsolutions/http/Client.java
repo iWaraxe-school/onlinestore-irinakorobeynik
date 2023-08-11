@@ -15,7 +15,7 @@ import java.util.Properties;
 
 public class Client {
     public static void OrderProduct() {
-        try (InputStream input = Files.newInputStream(Paths.get("store/src/main/resources/config.properties"));) {
+        try (InputStream input = Files.newInputStream(Paths.get("store/src/main/resources/config.properties"))) {
             Properties prop = new Properties();
             prop.load(input);
             Product orderedProduct = ProductsDAO.getRandomProduct();

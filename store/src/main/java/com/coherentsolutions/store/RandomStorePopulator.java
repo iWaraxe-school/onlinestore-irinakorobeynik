@@ -13,7 +13,7 @@ public class RandomStorePopulator {
 
     private final Store store;
 
-/* these final variables are used to declare boundary values of product amount for the category*/
+/* these final variables are used to declare boundary values of product amount for the category. The values are determined with the task*/
     public static final int MIN_VALUE = 1;
     public static final int MAX_VALUE = 6;
 
@@ -44,25 +44,13 @@ public class RandomStorePopulator {
         }));
     }
 
-    /* creates instances of classes that extends
-    Category class and add them to CategoryList */
     private void fillStoreWithCategories() {
-/*        Reflections reflections = new Reflections("com.coherentsolutions.domain");
-        Set<Class<? extends Category>> allClasses = reflections.getSubTypesOf(Category.class);
-        CategoryFactory categoryFactory = new CategoryFactory();
-        allClasses.forEach(allClass -> {
-            try {
-                this.store.addCategory(allClass.getConstructor().newInstance());
-            } catch (InstantiationException | InvocationTargetException | IllegalAccessException |
-                     NoSuchMethodException e) {
-                throw new RuntimeException("Something goes wrong.Please Contact to Administrator");
-            }
-        });*/
+
         categoriesDBHelper.createCategoriesTable();
         if (categoriesDBHelper.getAllCategories().isEmpty()){
             List<String> categoryTypes = CategoryType.getCategoryTypesList();
             categoryTypes.forEach(category -> {
-                categoriesDBHelper.addCategoryEntry(category);
+                categoriesDBHelper.addCategoryEntry(CategoryFactory.createCategory(CategoryType.valueOf(category.toUpperCase())));
                 this.store.addCategory(CategoryFactory.createCategory(CategoryType.valueOf(category)));
             });
         }

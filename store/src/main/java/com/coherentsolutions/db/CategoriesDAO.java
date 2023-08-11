@@ -2,10 +2,7 @@ package com.coherentsolutions.db;
 
 import com.coherentsolutions.domain.*;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,25 +15,19 @@ public class CategoriesDAO extends DBHelper {
                     + "NAME varchar(255) NOT NULL, "
                     + "PRIMARY KEY (ID))");
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Something wrong with category table creation");
         }
     }
 
-    public void addCategoryEntry(String category) {
-        try (Connection connection = DBHelper.setConnection();) {
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(String.format("INSERT INTO CATEGORIES (NAME) VALUES ('%s')", category));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public void addCategoryEntry(Category category) {
         try (Connection connection = DBHelper.setConnection();) {
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(String.format("INSERT INTO CATEGORIES (NAME) VALUES ('%s')", category.getName()));
+            String sqlScript = "INSERT INTO CATEGORIES (NAME) VALUES (?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlScript);
+            preparedStatement.setString(1, category.getName());
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Something wrong with Category adding");
         }
     }
 
@@ -44,12 +35,14 @@ public class CategoriesDAO extends DBHelper {
 
         int categoryId = 0;
         try (Connection connection = DBHelper.setConnection();) {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(String.format("SELECT ID FROM CATEGORIES WHERE NAME = '%s'", category.getName()));
+            String sqlScript = "SELECT ID FROM CATEGORIES WHERE NAME = (?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlScript);
+            preparedStatement.setString(1, category.getName());
+            ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             categoryId = resultSet.getInt("id");
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Something wrong with getting Category ID");
         }
         return categoryId;
     }
@@ -61,10 +54,10 @@ public class CategoriesDAO extends DBHelper {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM CATEGORIES");
             while (rs.next()) {
-                сategoryList.add(CategoryFactory.createCategory(CategoryType.valueOf(rs.getString("NAME"))));
+                сategoryList.add(CategoryFactory.createCategory(CategoryType.valueOf(rs.getString("NAME").toUpperCase())));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Something wrong with getting CategoryList");
         }
         return сategoryList;
 
@@ -73,8 +66,10 @@ public class CategoriesDAO extends DBHelper {
     public List<Product> getProductListByCategory(Category category) {
         List<Product> productList = new ArrayList<>();
         try (Connection connection = DBHelper.setConnection();) {
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(String.format("SELECT * FROM PRODUCTS WHERE CATEGORY_ID = %d", getCategoryId(category)));
+            String sqlScript = "SELECT * FROM PRODUCTS WHERE CATEGORY_ID = (?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlScript);
+            preparedStatement.setInt(1, getCategoryId(category));
+            ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 Product product = new ProductBuilder()
                         .setName(rs.getString("NAME"))
@@ -84,7 +79,7 @@ public class CategoriesDAO extends DBHelper {
                 productList.add(product);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Something wrong with getting ProductList for Category");
         }
         return productList;
     }
@@ -95,8 +90,10 @@ public class CategoriesDAO extends DBHelper {
         try (Connection connection = DBHelper.setConnection();) {
             List<Product> productList = getProductListByCategory(category);
             StringBuilder builder = new StringBuilder();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(String.format("SELECT * FROM CATEGORIES WHERE NAME = '%s'", category.getName()));
+            String sqlScript = "SELECT * FROM CATEGORIES WHERE NAME = (?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlScript);
+            preparedStatement.setString(1, category.getName());
+            ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             String categoryName = resultSet.getString("NAME");
             if (productList.isEmpty()) {
@@ -107,10 +104,9 @@ public class CategoriesDAO extends DBHelper {
             }
             System.out.println(builder);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Something wrong with printing categories and products");
         }
     }
-
 
 
 }

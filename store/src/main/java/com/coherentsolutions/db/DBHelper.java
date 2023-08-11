@@ -11,18 +11,23 @@ import java.sql.Statement;
 import java.util.Properties;
 
 public class DBHelper {
+    private static Properties prop;
 
-    static Properties prop = new Properties();
-    public final static String URL = prop.getProperty("sqlUrl");
+ public DBHelper(){
+     try (InputStream input = Files.newInputStream(Paths.get("store/src/main/resources/config.properties"))) {
+         prop = new Properties();
+         prop.load(input);
+         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+     } catch (IOException | ClassNotFoundException e) {
+         throw new RuntimeException("Something wrong with property loading");
+     }
+ }
 
     public static Connection setConnection() {
-        try (InputStream input = Files.newInputStream(Paths.get("store/src/main/resources/config.properties"));) {
-            Properties prop = new Properties();
-            prop.load(input);
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            return DriverManager.getConnection(prop.getProperty("sqlUrl"));
-        } catch (IOException | ClassNotFoundException | SQLException e) {
-            throw new RuntimeException();
+        try {
+            return DriverManager.getConnection(DBHelper.prop.getProperty("sqlUrl"));
+        } catch (SQLException e) {
+            throw new RuntimeException("Something wrong with setting connection");
         }
     }
 
@@ -37,7 +42,7 @@ public class DBHelper {
     }
 
     public void clearDB() {
-        try (Connection connection = setConnection();) {
+        try (Connection connection = setConnection()) {
             boolean productsExist = connection.getMetaData().getTables(null,null, "PRODUCTS", null).next();
             boolean categoriesExist = connection.getMetaData().getTables(null,null, "CATEGORIES", null).next();
             if (productsExist || categoriesExist){
@@ -45,7 +50,7 @@ public class DBHelper {
             statement.executeUpdate("DROP TABLE PRODUCTS");
            statement.executeUpdate("DROP TABLE CATEGORIES");}
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("DB cannot be prepared for command execution.");
         }
     }
 

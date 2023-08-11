@@ -35,10 +35,10 @@ public class ProductComparator implements Comparator<Product> {
                 return o1.getName().compareTo(o2.getName());
             }
             case "price": {
-                return  o1.getPrice()-(o2.getPrice());
+                return  Integer.compare(o1.getPrice(), o2.getPrice());
             }
             case "rate": {
-                return  o1.getRate()-o2.getRate();
+                return  Integer.compare(o1.getRate(), o2.getRate());
             }
             default:
                 throw new IllegalArgumentException("Invalid soritng value");

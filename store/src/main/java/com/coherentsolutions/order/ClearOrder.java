@@ -1,12 +1,12 @@
 package com.coherentsolutions.order;
 
+import org.apache.log4j.Logger;
+
 import java.util.concurrent.TimeUnit;
-
-import static org.reflections.Reflections.log;
-
 public class ClearOrder implements Runnable {
     private Order order = Order.getInstance();
-    private Thread currentThread;
+    private static Logger log = Logger.getLogger(ClearOrder.class.getName());
+    private volatile Thread currentThread;
 
     @Override
     public void run() {
@@ -17,6 +17,7 @@ public class ClearOrder implements Runnable {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 log.error("Thread was interrupted", e);
+                break;
             }
             order.emptyOrder();
             System.out.println("Cart is empty");

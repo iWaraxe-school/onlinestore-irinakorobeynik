@@ -19,7 +19,7 @@ public class Auth extends BasicAuthenticator {
             prop.load(input);
             return userName.equals(prop.getProperty("user")) && password.equals(prop.getProperty("password"));
         } catch (IOException e) {
-            throw new RuntimeException();
+            throw new RuntimeException("Something wrong with credentials");
         }
 
     }

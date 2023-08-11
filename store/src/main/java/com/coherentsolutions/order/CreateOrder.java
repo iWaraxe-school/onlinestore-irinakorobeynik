@@ -1,18 +1,19 @@
 package com.coherentsolutions.order;
 
 import com.coherentsolutions.store.Store;
+import org.apache.log4j.Logger;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import static org.reflections.Reflections.log;
 
 public class CreateOrder implements Runnable {
+    private static Logger log = Logger.getLogger(CreateOrder.class.getName());
     private Order order = Order.getInstance();
+
     @Override
     public void run() {
-        Random random = new Random();
-        int randomNumber = random.nextInt(30);
+        int randomNumber = new Random().nextInt(30);
         System.out.println("Start Thread " + Thread.currentThread().getName());
         order.addProductToCart(Store.getInstance().generateRandomProduct());
         order.printOrder();
