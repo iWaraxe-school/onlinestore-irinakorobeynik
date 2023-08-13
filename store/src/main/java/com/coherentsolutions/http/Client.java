@@ -16,6 +16,7 @@ import java.util.Properties;
 public class Client {
     public static void OrderProduct() {
         try (InputStream input = Files.newInputStream(Paths.get("store/src/main/resources/application.properties"))) {
+
             Properties prop = new Properties();
             prop.load(input);
             Product orderedProduct = ProductsDAO.getRandomProduct();
@@ -26,7 +27,7 @@ public class Client {
             RestAssured.baseURI = prop.getProperty("url");
             RequestSpecification request = RestAssured.given();
             request.header("Content-Type", "application/json");
-            request.auth().basic(prop.getProperty("user"), prop.getProperty("password"));
+            request.auth().basic(prop.getProperty("user"), PasswordDecryptor.getInstance().decryptPassword());
             request.body(productJson);
 
             Response response = request.post("/order");

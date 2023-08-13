@@ -18,8 +18,6 @@ public class StoreApp {
         Server.runServer();
         Client.OrderProduct();
 
-
-
     }
     }
 
