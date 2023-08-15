@@ -1,9 +1,9 @@
 package com.coherentsolutions.domain;
 
 public class Product {
-    private String name;
-    private int rate;
-    private int price;
+    private final String name;
+    private final int rate;
+    private final int price;
 
     public Product(ProductBuilder productBuilder) {
         this.name = productBuilder.getName();
